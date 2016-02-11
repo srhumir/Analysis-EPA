@@ -18,26 +18,19 @@ SCC <- readRDS("./data/Source_Classification_Code.rds")
 
 
 ##Across the United States, how have emissions from coal combustion-related
-###sources changed from 1999–2008?
-png("./assignment2/plot3.png", type = "cairo")
+##sources changed from 1999-2008?
 
-in SCC$SCC.Level.One Combustion and in SCC$SCC.Level.Three Coal
+##Get SSC's related to coal combustion
+index <- grep(".*Comb.*Coal.*", SCC$Short.Name)
+CoalSCC <- as.character(SCC$SCC)[index]
+NEICoal <- subset(NEI, SCC %in% CoalSCC)
 
+##start plotting
+png("./assignment2/plot4.png", type = "cairo")
 
-
-
-NEIBaltimore <- subset(NEI, fips == "24510")
-###Creste factor by combinig type and year
-f <- as.factor(paste(NEIBaltimore$type, NEIBaltimore$year, sep = ","))
-###compute the total emmisikon by type and year
-a <- rowsum(NEIBaltimore$Emissions, f)
-###extract type and year to make new data.frame
-b <- (strsplit(as.character(rownames(a)), ","))
-type <- sapply(b, function(x) as.character(x[1]))
-year <- sapply(b, function(x) as.integer(x[2]))
-###new data.fram consisitinf of total emission by type and year
-BaltimoreTY <- data.frame( Total_Emission = tapply(NEIBaltimore$Emissions, f, sum),
-                           type = type, year = year)
-###make plot
-qplot(year, Total_Emission , data = BaltimoreTY, geom = "line", color  = type )
+plot(unique(NEICoal$year),tapply(NEICoal$Emissions, NEICoal$year, sum),
+     type = "l", lwd = 3, col = "blue",
+     main = "", xlab = "", ylab = "")
+title(main = "Total PM.25 emission related to coal combustion",
+      xlab = "Year", ylab = "PM2.5 emission (ton)")
 dev.off()
