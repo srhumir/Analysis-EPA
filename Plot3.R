@@ -17,12 +17,11 @@ NEI <- readRDS("./data/summarySCC_PM25.rds")
 SCC <- readRDS("./data/Source_Classification_Code.rds")
 
 
-##HOf the four types of sources indicated by the type 
+##Of the four types of sources indicated by the type 
 ##(point, nonpoint, onroad, nonroad) variable, which of these four sources 
 ##have seen decreases in emissions from 1999–2008 for Baltimore City?
 ##Which have seen increases in emissions from 1999–2008? 
 ##Use the ggplot2 plotting system to make a plot answer this question.
-png("./assignment2/plot3.png", type = "cairo")
 NEIBaltimore <- subset(NEI, fips == "24510")
 ###Creste factor by combinig type and year
 f <- as.factor(paste(NEIBaltimore$type, NEIBaltimore$year, sep = ","))
@@ -36,5 +35,6 @@ year <- sapply(b, function(x) as.integer(x[2]))
 BaltimoreTY <- data.frame( Total_Emission = tapply(NEIBaltimore$Emissions, f, sum),
                            type = type, year = year)
 ###make plot
+png("./assignment2/plot3.png", type = "cairo")
 qplot(year, Total_Emission , data = BaltimoreTY, geom = "line", color  = type )
 dev.off()

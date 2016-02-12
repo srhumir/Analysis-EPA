@@ -19,11 +19,13 @@ SCC <- readRDS("./data/Source_Classification_Code.rds")
 
 ##Have total emissions from PM2.5 decreased in the Baltimore City, Maryland
 ##(fips == "24510") from 1999 to 2008? 
-png("./assignment2/plot2.png", type = "cairo")
+###subset Baltimore data
 NEIBaltimore <- subset(NEI, fips == "24510")
+##start plotting
+png("./assignment2/plot2.png", type = "cairo")
 barplot(tapply(NEIBaltimore$Emissions, NEIBaltimore$year, sum),
      main = "", xlab = "", ylab = "")
-title(main = "Total PM.25 emission in 3-year periods",
+title(main = "Total PM.25 emission in Baltimore City",
       xlab = "Year",
-      ylab = "PM2.5 emission (ton) in Baltimore City")
+      ylab = "PM2.5 emission (ton)")
 dev.off()

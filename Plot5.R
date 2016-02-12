@@ -23,7 +23,7 @@ SCC <- readRDS("./data/Source_Classification_Code.rds")
 NEIBal <- subset(NEI, fips == "24510")
 ###find cehicle relared SCC's
 index <- grep(".*[Vv]ehicle.*", SCC$Short.Name)
-VehicleSCC <- as.character(SCC$SCC[a])
+VehicleSCC <- as.character(SCC$SCC[index])
 NEIBalVehicle <- subset(NEIBal, SCC %in% VehicleSCC)
 
 ##start plotting
@@ -31,6 +31,6 @@ png("./assignment2/plot5.png", type = "cairo")
 plot(unique(NEIBalVehicle$year),tapply(NEIBalVehicle$Emissions, NEIBalVehicle$year, sum),
      type = "l", lwd = 3, col = "blue",
      main = "", xlab = "", ylab = "")
-title(main = "Total PM.25 emission related to Vehicle",
+title(main = "Total PM.25 emission related to Vehicle in Baltimore",
       xlab = "Year", ylab = "PM2.5 emission (ton)")
 dev.off()

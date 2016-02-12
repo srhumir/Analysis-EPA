@@ -23,11 +23,17 @@ SCC <- readRDS("./data/Source_Classification_Code.rds")
 
 ###subset to Baltimore
 NEIBalLos <- subset(NEI, fips == "24510" | fips == "06037")
+###find cehicle relared SCC's
+index <- grep(".*[Vv]ehicle.*", SCC$Short.Name)
+VehicleSCC <- as.character(SCC$SCC)[index]
+NEIBalLosVehicle <- subset(NEIBalLos, SCC %in% VehicleSCC)
+NEIBalLosVehicle$city <- factor(NEIBalLosVehicle$fips, labels = c("Los Angeles", "Baltimre"))
 
-use qplot with weight and aes maybe density
-qplot(year, weight = Emissions, data = NEIBalLos, col = fips)
 ##start plotting
-png("./assignment2/plot5.png", type = "cairo")
-
-
+library(ggplot2)
+png("./assignment2/plot6.png", type = "cairo")
+p <- ggplot(NEIBalLosVehicle)
+p2 <- p + geom_bar(mapping = aes(x= as.factor(year), weight = Emissions))+
+  xlab("Year")+ ylab("Total PM2.5 Emission (ton) ")
+p2 + facet_grid(.~city )
 dev.off()
